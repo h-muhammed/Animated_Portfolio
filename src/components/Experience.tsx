@@ -6,12 +6,21 @@ import { Badge } from './ui/badge';
 export default function Experience() {
   const experiences = [
     {
+  title: 'Associate Software Engineer',
+  company: 'American Premium Water System',
+  duration: '03/2025 – Present',
+  description: 'Working on a Flutter-based web app and ERP systems using Angular and Laravel. Contributing to frontend and backend feature development. Preparing to initiate a new ERP project using Spring Boot and Angular.',
+  technologies: ['.NET Core', 'C#', 'SQL Server', 'Azure', 'RabbitMQ','laravel','Angular'],
+  current: true
+},
+
+    {
       title: 'Intern Software Engineer',
       company: 'American Premium Water System',
-      duration: '10/2024 - Present',
+      duration: '10/2024 - 3/2025',
       description: 'Developed mobile apps for Android, iOS, and Web enabling customers to view payments and consumption history. Built business card reader using Google Vision API and Python.',
       technologies: ['Flutter', '.Net Core', 'MSSQL', 'Azure', 'Firebase', 'Python', 'React', 'Node.js'],
-      current: true
+      current: false
     },
     {
       title: 'Software Engineering Student',
@@ -61,7 +70,7 @@ export default function Experience() {
                 <div className={`absolute w-4 h-4 rounded-full ${
                   exp.current ? 'bg-primary animate-pulse-glow' : 'bg-accent'
                 } left-6 md:left-auto ${
-                  index % 2 === 0 ? 'md:-right-2' : 'md:-left-2'
+                  index % 2 === 0 ? 'md:-right-2' : 'md:-left-2.5'
                 } top-6 z-10`}></div>
                 
                 <Card className="card-gradient shadow-xl hover:scale-105 transition-all duration-300">
