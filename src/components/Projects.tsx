@@ -54,7 +54,8 @@ export default function Projects() {
     {
       title: 'Business Card Reader with OCR',
       description:
-        'Python app using Google Vision API and SpaCy to extract and format data from business cards. Frontend in React.',
+        'Python app using Google Vision API and SpaCy to extract and format data from business cards. Frontend in React and backend in Node.js.',
+      video: '/videos/joozy-app.mp4',
       image: '/api/placeholder/600/400',
       tech: ['Python', 'Google Vision API', 'SpaCy', 'React', 'Node.js'],
       github: '',
