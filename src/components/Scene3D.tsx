@@ -46,11 +46,15 @@ function FloatingShapes() {
 
 export default function Scene3D() {
   return (
-    <div className="absolute inset-0 -z-10 opacity-60">
+    <div className="absolute inset-0 -z-10 opacity-40">
       <Canvas 
         camera={{ position: [0, 0, 8], fov: 60 }}
+        frameloop="demand"
+        dpr={[1, 1.5]}
+        performance={{ min: 0.5 }}
         onCreated={({ gl }) => {
-          gl.setClearColor('#0a0a0a', 1);
+          gl.setClearColor('#0a0a0a', 0);
+          gl.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
         }}
       >
         <ambientLight intensity={0.3} />
@@ -58,13 +62,13 @@ export default function Scene3D() {
         <pointLight position={[-10, -10, -10]} intensity={0.3} color="#8b5cf6" />
         
         <Stars 
-          radius={50} 
-          depth={30} 
-          count={2000} 
-          factor={2} 
+          radius={30} 
+          depth={20} 
+          count={800} 
+          factor={1} 
           saturation={0} 
           fade 
-          speed={0.5} 
+          speed={0.2} 
         />
         
         <FloatingShapes />
@@ -73,7 +77,7 @@ export default function Scene3D() {
           enableZoom={false}
           enablePan={false}
           autoRotate
-          autoRotateSpeed={0.3}
+          autoRotateSpeed={0.1}
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
         />

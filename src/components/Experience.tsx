@@ -70,7 +70,7 @@ export default function Experience() {
                 <div className={`absolute w-4 h-4 rounded-full ${
                   exp.current ? 'bg-primary animate-pulse-glow' : 'bg-accent'
                 } left-6 md:left-auto ${
-                  index % 2 === 0 ? 'md:-right-2' : 'md:-left-2'
+                  index % 2 === 0 ? 'md:-right-2' : 'md:-left-2.5'
                 } top-6 z-10`}></div>
                 
                 <Card className="card-gradient shadow-xl hover:scale-105 transition-all duration-300">

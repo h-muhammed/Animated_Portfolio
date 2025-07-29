@@ -1,12 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import { useToast } from './ui/use-toast';
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.email || !formData.message) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('https://apws.app.n8n.cloud/webhook/portfolio-message', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message Sent!",
+          description: "Thank you for your message. I'll get back to you soon.",
+        });
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <section className="py-20 px-4" id="contact">
       <div className="container mx-auto">
@@ -84,35 +148,65 @@ export default function Contact() {
               <CardHeader>
                 <h3 className="text-xl font-bold">Send a Message</h3>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="text-sm font-medium mb-2 block">Name</label>
-                    <Input placeholder="Your name" />
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Name</label>
+                      <Input 
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="Your name" 
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium mb-2 block">Email</label>
+                      <Input 
+                        name="email"
+                        type="email" 
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="your.email@example.com" 
+                        required
+                      />
+                    </div>
                   </div>
+                  
                   <div>
-                    <label className="text-sm font-medium mb-2 block">Email</label>
-                    <Input type="email" placeholder="your.email@example.com" />
+                    <label className="text-sm font-medium mb-2 block">Subject</label>
+                    <Input 
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      placeholder="Project collaboration" 
+                    />
                   </div>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Subject</label>
-                  <Input placeholder="Project collaboration" />
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Message</label>
-                  <Textarea 
-                    placeholder="Tell me about your project..."
-                    className="min-h-32"
-                  />
-                </div>
-                
-                <Button variant="hero" size="lg" className="w-full group">
-                  <Send className="mr-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                  Send Message
-                </Button>
+                  
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Message</label>
+                    <Textarea 
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Tell me about your project..."
+                      className="min-h-32"
+                      required
+                    />
+                  </div>
+                  
+                  <Button 
+                    type="submit"
+                    variant="hero" 
+                    size="lg" 
+                    className="w-full group"
+                    disabled={isLoading}
+                  >
+                    <Send className="mr-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                    {isLoading ? 'Sending...' : 'Send Message'}
+                  </Button>
+                </form>
               </CardContent>
             </Card>
           </motion.div>
